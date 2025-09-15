@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Website Audit Tool</title>
+    <style>
+        :root {
+            --primary: #1b1f32;
+            --accent: #1565c0;
+            --bg: #f5f7fa;
+            --dark: #0c0c1e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--primary);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #fff;
+            padding: 80px 20px 100px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        #auditForm {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        #auditForm input[type="text"] {
+            padding: 12px 15px;
+            width: 350px;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        #auditForm button {
+            padding: 12px 20px;
+            background: #ffcc00;
+            color: #000;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #auditForm button:hover {
+            background: #e6b800;
+        }
+
+        section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2rem;
+            color: var(--dark);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature {
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature h3 {
+            margin: 10px 0;
+            color: var(--accent);
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .step {
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .step span {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial {
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            font-style: italic;
+        }
+
+        #results {
+            max-width: 800px;
+            width: 100%;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: none;
+            margin: 40px auto;
+        }
+
+        .result-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .score {
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .problem {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .solution {
+            color: #1565c0;
+            margin-left: 8px;
+            font-size: 0.9em;
+        }
+
+        .cta {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 12px;
+            margin-top: 50px;
+        }
+
+        .cta button {
+            margin-top: 20px;
+            background: #ffcc00;
+            color: #000;
+            font-weight: bold;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cta button:hover {
+            background: #e6b800;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: #1b1f32;
+            color: #ccc;
+            margin-top: 60px;
+        }
+
+        footer a {
+            color: #ffcc00;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+
+        .result-container {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .result-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .result-card {
+            background: #f9fafc;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .result-card strong {
+            display: block;
+            color: #1b1f32;
+            margin-bottom: 6px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .badge.yes {
+            background: #2e7d32;
+        }
+
+        .badge.no {
+            background: #c62828;
+        }
+
+        .progress-wrapper {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0;
+            background: #1b1f32;
+            border-radius: 10px;
+            text-align: center;
+            color: #fff;
+            font-size: 0.8em;
+            line-height: 20px;
+            transition: width 1s ease-in-out;
+        }
+
+        .problem-list {
+            margin-top: 20px;
+        }
+
+        .problem-item {
+            background: #fff3f3;
+            border-left: 4px solid #c62828;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+        }
+
+        .problem-item .solution {
+            display: block;
+            color: #1565c0;
+            margin-top: 4px;
+            font-size: 0.9em;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Website SEO Audit Tool</h1>
+        <p>Analyze your website’s SEO performance, discover issues, and boost your rankings in minutes!</p>
+        <form id="auditForm">
+            <input type="text" id="urlInput" placeholder="Enter a URL (example.com)" required />
+            <button type="submit">Audit Now</button>
+        </form>
+    </header>
+
+    <div id="results"></div>
+
+    <section>
+        <h2 class="section-title">Key Features</h2>
+        <div class="features-grid">
+            <div class="feature">
+                <h3>🔍 SEO Analysis</h3>
+                <p>Get detailed reports on titles, descriptions, headers, and structured data.</p>
+            </div>
+            <div class="feature">
+                <h3>⚡ Fast Results</h3>
+                <p>Receive insights in seconds to take immediate action on SEO issues.</p>
+            </div>
+            <div class="feature">
+                <h3>📈 Score Tracking</h3>
+                <p>Track your website’s SEO score and see improvements over time.</p>
+            </div>
+            <div class="feature">
+                <h3>📊 Readability Checks</h3>
+                <p>Ensure your content is clear, structured, and engaging to users.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps">
+            <div class="step">
+                <span>1</span>
+                <h3>Enter Website URL</h3>
+                <p>Type your domain or webpage link in the search bar above.</p>
+            </div>
+            <div class="step">
+                <span>2</span>
+                <h3>Run the Audit</h3>
+                <p>Click Audit Now and let our engine scan your site for SEO issues.</p>
+            </div>
+            <div class="step">
+                <span>3</span>
+                <h3>Get Your Report</h3>
+                <p>See your SEO score, problems, and instant suggestions to improve.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">What Our Users Say</h2>
+        <div class="testimonials">
+            <div class="testimonial">
+                “This tool helped me fix my SEO in one afternoon. Highly recommended!”
+                <br><strong>- Sarah, Blogger</strong>
+            </div>
+            <div class="testimonial">
+                “Super fast and accurate reports. My traffic has doubled in 2 weeks.”
+                <br><strong>- James, Marketer</strong>
+            </div>
+            <div class="testimonial">
+                “Easy to use and extremely helpful for beginners like me.”
+                <br><strong>- Aisha, Small Business Owner</strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <h2>Ready to Boost Your SEO?</h2>
+        <p>Enter your website now and start ranking higher on search engines today.</p>
+        <button onclick="document.getElementById('urlInput').focus()">Start Audit</button>
+    </section>
+
+    <footer>
+        © 2025 Website Audit Tool | <a href="#">Privacy Policy</a> | <a href="#">Contact</a>
+    </footer>
+
+    <script>
+        const form = document.getElementById("auditForm");
+        const urlInput = document.getElementById("urlInput");
+        const resultsDiv = document.getElementById("results");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const url = urlInput.value.trim();
+            if (!url) return;
+
+            resultsDiv.style.display = "block";
+            resultsDiv.innerHTML = "<p>Auditing... please wait ⏳</p>";
+
+            try {
+                const res = await fetch(`https://aeodetector.vercel.app/audit?url=${encodeURIComponent(url)}`);
+                const data = await res.json();
+
+                if (!data.success || !data.results) {
+                    resultsDiv.innerHTML = `<p style="color:red">Error: ${data.error || "No results returned"}</p>`;
+                    return;
+                }
+
+                const r = data.results;
+
+                const problems = [];
+                if (!r.title) problems.push({ item: "Title", solution: "Add a descriptive <title> tag" });
+                if (!r.metaDescription) problems.push({ item: "Meta Description", solution: "Add a <meta name='description'> tag" });
+                if (!r.h1) problems.push({ item: "H1", solution: "Include a main heading <h1> on the page" });
+                if (r.imagesMissingAlt > 0) problems.push({ item: "Missing Image Alts", solution: "Add alt attributes to all images" });
+                if (!r.schemaDetected) problems.push({ item: "Schema", solution: "Add structured data (JSON-LD) for better SEO" });
+                if (!r.structuredContent) problems.push({ item: "Structured Content", solution: "Use headings and semantic tags" });
+
+                resultsDiv.innerHTML = `
+  <div class="result-container">
+    <div class="progress-wrapper">
+      <strong>Overall SEO Score</strong>
+      <div class="progress-bar">
+        <div class="progress-fill" id="scoreBar">${r.overallScore || 0}%</div>
+      </div>
+    </div>
+    <div class="result-section">
+      <div class="result-card"><strong>Title</strong>${r.title || "❌ Missing"}</div>
+      <div class="result-card"><strong>Meta Description</strong>${r.metaDescription || "❌ Missing"}</div>
+      <div class="result-card"><strong>H1</strong>${r.h1 || "❌ Missing"}</div>
+      <div class="result-card"><strong>Word Count</strong>${r.wordCount || 0}</div>
+      <div class="result-card"><strong>Images</strong>${r.imagesTotal || 0} total, ${r.imagesMissingAlt || 0} missing alt</div>
+      <div class="result-card"><strong>Internal Links</strong>${r.internalLinks || 0}</div>
+      <div class="result-card"><strong>External Links</strong>${r.externalLinks || 0}</div>
+      <div class="result-card"><strong>Schema Detected</strong>
+        <span class="badge ${r.schemaDetected ? "yes" : "no"}">${r.schemaDetected ? "Yes" : "No"}</span>
+      </div>
+      <div class="result-card"><strong>FAQ Schema</strong>
+        <span class="badge ${r.faqSchema ? "yes" : "no"}">${r.faqSchema ? "Yes" : "No"}</span>
+      </div>
+      <div class="result-card"><strong>Structured Content</strong>
+        <span class="badge ${r.structuredContent ? "yes" : "no"}">${r.structuredContent ? "Yes" : "No"}</span>
+      </div>
+      <div class="result-card"><strong>Readability Score</strong>${r.readabilityScore || "N/A"}</div>
+    </div>
+
+    
+
+    ${problems.length > 0
+                        ? `<h3>⚠️ Problems & Solutions</h3>
+           <div class="problem-list">
+             ${problems.map(p =>
+                            `<div class="problem-item">
+                  <strong>${p.item}</strong>
+                  <span class="solution">${p.solution}</span>
+                </div>`
+                        ).join("")}
+           </div>`
+                        : "<p style='color:green'>✅ No major problems detected!</p>"
+                    }
+  </div>
+`;
+
+                // Animate progress bar
+                setTimeout(() => {
+                    const bar = document.getElementById("scoreBar");
+                    bar.style.width = (r.overallScore || 0) + "%";
+                }, 100);
+
+            } catch (err) {
+                resultsDiv.innerHTML = `<p style="color:red">Failed: ${err.message}</p>`;
+            }
+        });
+    </script>
+</body>
+
+</html>
