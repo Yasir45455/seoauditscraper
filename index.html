@@ -1,493 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Website Audit Tool</title>
-    <style>
-        :root {
-            --primary: #1b1f32;
-            --accent: #1565c0;
-            --bg: #f5f7fa;
-            --dark: #0c0c1e;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg);
-            color: var(--primary);
-            line-height: 1.6;
-        }
-
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: #fff;
-            padding: 80px 20px 100px;
-            text-align: center;
-        }
-
-        header h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-        }
-
-        header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto 30px;
-        }
-
-        #auditForm {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        #auditForm input[type="text"] {
-            padding: 12px 15px;
-            width: 350px;
-            border: none;
-            border-radius: 8px;
-            outline: none;
-        }
-
-        #auditForm button {
-            padding: 12px 20px;
-            background: #ffcc00;
-            color: #000;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        #auditForm button:hover {
-            background: #e6b800;
-        }
-
-        section {
-            padding: 80px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-            font-size: 2rem;
-            color: var(--dark);
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-        }
-
-        .feature {
-            background: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .feature h3 {
-            margin: 10px 0;
-            color: var(--accent);
-        }
-
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            text-align: center;
-        }
-
-        .step {
-            background: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .step span {
-            display: inline-block;
-            background: var(--accent);
-            color: #fff;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .testimonials {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .testimonial {
-            background: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            text-align: center;
-            font-style: italic;
-        }
-
-        #results {
-            max-width: 800px;
-            width: 100%;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            display: none;
-            margin: 40px auto;
-        }
-
-        .result-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .score {
-            font-weight: bold;
-            color: #2e7d32;
-        }
-
-        .problem {
-            color: #c62828;
-            font-weight: bold;
-        }
-
-        .solution {
-            color: #1565c0;
-            margin-left: 8px;
-            font-size: 0.9em;
-        }
-
-        .cta {
-            text-align: center;
-            padding: 60px 20px;
-            background: var(--primary);
-            color: #fff;
-            border-radius: 12px;
-            margin-top: 50px;
-        }
-
-        .cta button {
-            margin-top: 20px;
-            background: #ffcc00;
-            color: #000;
-            font-weight: bold;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .cta button:hover {
-            background: #e6b800;
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            background: #1b1f32;
-            color: #ccc;
-            margin-top: 60px;
-        }
-
-        footer a {
-            color: #ffcc00;
-            text-decoration: none;
-            margin: 0 8px;
-        }
-
-        .result-container {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        .result-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .result-card {
-            background: #f9fafc;
-            border-radius: 10px;
-            padding: 15px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        .result-card strong {
-            display: block;
-            color: #1b1f32;
-            margin-bottom: 6px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .badge.yes {
-            background: #2e7d32;
-        }
-
-        .badge.no {
-            background: #c62828;
-        }
-
-        .progress-wrapper {
-            margin: 20px 0;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: #e0e0e0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 0;
-            background: #1b1f32;
-            border-radius: 10px;
-            text-align: center;
-            color: #fff;
-            font-size: 0.8em;
-            line-height: 20px;
-            transition: width 1s ease-in-out;
-        }
-
-        .problem-list {
-            margin-top: 20px;
-        }
-
-        .problem-item {
-            background: #fff3f3;
-            border-left: 4px solid #c62828;
-            padding: 10px;
-            margin-bottom: 8px;
-            border-radius: 6px;
-        }
-
-        .problem-item .solution {
-            display: block;
-            color: #1565c0;
-            margin-top: 4px;
-            font-size: 0.9em;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Full SEO Audit Viewer</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f6f8fb; }
+    .badge-yes { background:#2e7d32; color:#fff; }
+    .badge-no  { background:#c62828; color:#fff; }
+    pre.json { max-height: 360px; overflow:auto; background:#0b1220; color:#e6eef8; padding:12px; border-radius:6px; }
+    .field-name { font-weight:600; color:#111827; }
+    .small-muted { color:#6b7280; font-size:0.9rem; }
+  </style>
 </head>
-
 <body>
-    <header>
-        <h1>Website SEO Audit Tool</h1>
-        <p>Analyze your website’s SEO performance, discover issues, and boost your rankings in minutes!</p>
-        <form id="auditForm">
-            <input type="text" id="urlInput" placeholder="Enter a URL (example.com)" required />
-            <button type="submit">Audit Now</button>
-        </form>
-    </header>
+  <div class="container my-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h1 class="h3 mb-3 text-center">SEO Audit — Full Results Viewer</h1>
 
-    <div id="results"></div>
-
-    <section>
-        <h2 class="section-title">Key Features</h2>
-        <div class="features-grid">
-            <div class="feature">
-                <h3>🔍 SEO Analysis</h3>
-                <p>Get detailed reports on titles, descriptions, headers, and structured data.</p>
-            </div>
-            <div class="feature">
-                <h3>⚡ Fast Results</h3>
-                <p>Receive insights in seconds to take immediate action on SEO issues.</p>
-            </div>
-            <div class="feature">
-                <h3>📈 Score Tracking</h3>
-                <p>Track your website’s SEO score and see improvements over time.</p>
-            </div>
-            <div class="feature">
-                <h3>📊 Readability Checks</h3>
-                <p>Ensure your content is clear, structured, and engaging to users.</p>
-            </div>
+        <div class="row mb-3">
+          <div class="col-md-9">
+            <input id="urlInput" class="form-control" placeholder="Enter URL (example: https://example.com)" />
+          </div>
+          <div class="col-md-3 d-grid gap-2">
+            <button id="runBtn" class="btn btn-primary">Run Audit</button>
+            <button id="loadSampleBtn" class="btn btn-outline-secondary">Load Sample</button>
+          </div>
         </div>
-    </section>
 
-    <section>
-        <h2 class="section-title">How It Works</h2>
-        <div class="steps">
-            <div class="step">
-                <span>1</span>
-                <h3>Enter Website URL</h3>
-                <p>Type your domain or webpage link in the search bar above.</p>
-            </div>
-            <div class="step">
-                <span>2</span>
-                <h3>Run the Audit</h3>
-                <p>Click Audit Now and let our engine scan your site for SEO issues.</p>
-            </div>
-            <div class="step">
-                <span>3</span>
-                <h3>Get Your Report</h3>
-                <p>See your SEO score, problems, and instant suggestions to improve.</p>
-            </div>
+        <div id="loading" class="text-center my-3 d-none">
+          <div class="spinner-border text-primary"></div>
+          <div class="small-muted mt-2">Auditing... this may take a few seconds</div>
         </div>
-    </section>
 
-    <section>
-        <h2 class="section-title">What Our Users Say</h2>
-        <div class="testimonials">
-            <div class="testimonial">
-                “This tool helped me fix my SEO in one afternoon. Highly recommended!”
-                <br><strong>- Sarah, Blogger</strong>
-            </div>
-            <div class="testimonial">
-                “Super fast and accurate reports. My traffic has doubled in 2 weeks.”
-                <br><strong>- James, Marketer</strong>
-            </div>
-            <div class="testimonial">
-                “Easy to use and extremely helpful for beginners like me.”
-                <br><strong>- Aisha, Small Business Owner</strong>
-            </div>
+        <div id="error" class="alert alert-danger d-none"></div>
+
+        <div id="controls" class="d-flex gap-2 mb-3 d-none">
+          <button id="copyJson" class="btn btn-sm btn-outline-success">Copy JSON</button>
+          <button id="downloadJson" class="btn btn-sm btn-outline-primary">Download JSON</button>
+          <button id="collapseAll" class="btn btn-sm btn-outline-secondary">Collapse All</button>
         </div>
-    </section>
 
-    <section class="cta">
-        <h2>Ready to Boost Your SEO?</h2>
-        <p>Enter your website now and start ranking higher on search engines today.</p>
-        <button onclick="document.getElementById('urlInput').focus()">Start Audit</button>
-    </section>
+        <div id="resultsArea" class="mt-3"></div>
 
-    <footer>
-        © 2025 Website Audit Tool | <a href="#">Privacy Policy</a> | <a href="#">Contact</a>
-    </footer>
-
-    <script>
-        const form = document.getElementById("auditForm");
-        const urlInput = document.getElementById("urlInput");
-        const resultsDiv = document.getElementById("results");
-
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const url = urlInput.value.trim();
-            if (!url) return;
-
-            resultsDiv.style.display = "block";
-            resultsDiv.innerHTML = "<p>Auditing... please wait ⏳</p>";
-
-            try {
-                const res = await fetch(`https://aeodetector.vercel.app/audit?url=${encodeURIComponent(url)}`);
-                const data = await res.json();
-
-                if (!data.success || !data.results) {
-                    resultsDiv.innerHTML = `<p style="color:red">Error: ${data.error || "No results returned"}</p>`;
-                    return;
-                }
-
-                const r = data.results;
-
-                const problems = [];
-                if (!r.title) problems.push({ item: "Title", solution: "Add a descriptive <title> tag" });
-                if (!r.metaDescription) problems.push({ item: "Meta Description", solution: "Add a <meta name='description'> tag" });
-                if (!r.h1) problems.push({ item: "H1", solution: "Include a main heading <h1> on the page" });
-                if (r.imagesMissingAlt > 0) problems.push({ item: "Missing Image Alts", solution: "Add alt attributes to all images" });
-                if (!r.schemaDetected) problems.push({ item: "Schema", solution: "Add structured data (JSON-LD) for better SEO" });
-                if (!r.structuredContent) problems.push({ item: "Structured Content", solution: "Use headings and semantic tags" });
-
-                resultsDiv.innerHTML = `
-  <div class="result-container">
-    <div class="progress-wrapper">
-      <strong>Overall SEO Score</strong>
-      <div class="progress-bar">
-        <div class="progress-fill" id="scoreBar">${r.overallScore || 0}%</div>
       </div>
     </div>
-    <div class="result-section">
-      <div class="result-card"><strong>Title</strong>${r.title || "❌ Missing"}</div>
-      <div class="result-card"><strong>Meta Description</strong>${r.metaDescription || "❌ Missing"}</div>
-      <div class="result-card"><strong>H1</strong>${r.h1 || "❌ Missing"}</div>
-      <div class="result-card"><strong>Word Count</strong>${r.wordCount || 0}</div>
-      <div class="result-card"><strong>Images</strong>${r.imagesTotal || 0} total, ${r.imagesMissingAlt || 0} missing alt</div>
-      <div class="result-card"><strong>Internal Links</strong>${r.internalLinks || 0}</div>
-      <div class="result-card"><strong>External Links</strong>${r.externalLinks || 0}</div>
-      <div class="result-card"><strong>Schema Detected</strong>
-        <span class="badge ${r.schemaDetected ? "yes" : "no"}">${r.schemaDetected ? "Yes" : "No"}</span>
-      </div>
-      <div class="result-card"><strong>FAQ Schema</strong>
-        <span class="badge ${r.faqSchema ? "yes" : "no"}">${r.faqSchema ? "Yes" : "No"}</span>
-      </div>
-      <div class="result-card"><strong>Structured Content</strong>
-        <span class="badge ${r.structuredContent ? "yes" : "no"}">${r.structuredContent ? "Yes" : "No"}</span>
-      </div>
-      <div class="result-card"><strong>Readability Score</strong>${r.readabilityScore || "N/A"}</div>
-    </div>
-
-    
-
-    ${problems.length > 0
-                        ? `<h3>⚠️ Problems & Solutions</h3>
-           <div class="problem-list">
-             ${problems.map(p =>
-                            `<div class="problem-item">
-                  <strong>${p.item}</strong>
-                  <span class="solution">${p.solution}</span>
-                </div>`
-                        ).join("")}
-           </div>`
-                        : "<p style='color:green'>✅ No major problems detected!</p>"
-                    }
+    <footer class="text-center mt-4 small-muted">Backend: your audit-server `/audit` — shows everything returned (problems + solutions included)</footer>
   </div>
-`;
 
-                // Animate progress bar
-                setTimeout(() => {
-                    const bar = document.getElementById("scoreBar");
-                    bar.style.width = (r.overallScore || 0) + "%";
-                }, 100);
+<script>
+const API_BASE = 'https://aeodetector.vercel.app'; // <-- change to deployed backend when needed
 
-            } catch (err) {
-                resultsDiv.innerHTML = `<p style="color:red">Failed: ${err.message}</p>`;
-            }
-        });
-    </script>
+const runBtn = document.getElementById('runBtn');
+const loadSampleBtn = document.getElementById('loadSampleBtn');
+const urlInput = document.getElementById('urlInput');
+const loading = document.getElementById('loading');
+const errorDiv = document.getElementById('error');
+const resultsArea = document.getElementById('resultsArea');
+const controls = document.getElementById('controls');
+const copyJsonBtn = document.getElementById('copyJson');
+const downloadJsonBtn = document.getElementById('downloadJson');
+const collapseAllBtn = document.getElementById('collapseAll');
+
+let lastResponse = null;
+
+runBtn.addEventListener('click', () => runAudit(urlInput.value.trim()));
+loadSampleBtn.addEventListener('click', () => loadSample());
+copyJsonBtn?.addEventListener('click', copyJSON);
+downloadJsonBtn?.addEventListener('click', downloadJSON);
+collapseAllBtn?.addEventListener('click', collapseAll);
+
+async function runAudit(url) {
+  if (!url) return alert('Please enter a URL');
+  resultsArea.innerHTML = ''; errorDiv.classList.add('d-none'); controls.classList.add('d-none');
+  loading.classList.remove('d-none');
+
+  try {
+    const resp = await fetch(`${API_BASE}/audit?url=${encodeURIComponent(url)}`);
+    if (!resp.ok) {
+      const t = await resp.text();
+      throw new Error(`Server error ${resp.status}: ${t}`);
+    }
+    const data = await resp.json();
+    lastResponse = data;
+    renderFullResult(data);
+    controls.classList.remove('d-none');
+  } catch (err) {
+    console.error(err);
+    errorDiv.textContent = err.message || 'Request failed';
+    errorDiv.classList.remove('d-none');
+  } finally {
+    loading.classList.add('d-none');
+  }
+}
+
+function loadSample() {
+  // Use the sample you provided earlier or any JSON shape returned by backend
+  const sample = {
+    success:true,
+    results:{
+      url:"https://www.snipbyte.com",
+      title:"SnipByte - Premium Coding Templates for Web Development",
+      metaDescription:"Discover a vast collection...",
+      h1:"Elevate you",
+      wordCount:571,
+      imagesTotal:22,
+      imagesMissingAlt:0,
+      internalLinks:40,
+      externalLinks:0,
+      schemaDetected:false,
+      faqSchema:false,
+      featuredSnippetHeuristic:0,
+      directAnswerBlock:false,
+      questionContent:0,
+      entityCountEstimate:585,
+      readabilityScore:59.9,
+      multilingual:true,
+      structuredContent:1,
+      overallScore:51
+    },
+    score:51,
+    problems:[
+      {issue:"No external links", solution:"Include at least one link to a trusted external site."},
+      {issue:"Missing schema", solution:"Add structured data (JSON-LD) to improve SEO."},
+      {issue:"Missing FAQ schema", solution:"Add FAQ schema markup for Q&A content."},
+      {issue:"Low readability", solution:"Simplify your text and shorten sentences."}
+    ],
+    notes:[
+      "This audit is a best-effort automated pass.",
+      "Integrate Search Console for index coverage."
+    ]
+  };
+  lastResponse = sample;
+  renderFullResult(sample);
+  controls.classList.remove('d-none');
+}
+
+function prettyVal(v){
+  if (v === null || v === undefined || v === '') return 'N/A';
+  if (typeof v === 'boolean') return v ? '<span class="badge badge-yes">Yes</span>' : '<span class="badge badge-no">No</span>';
+  if (typeof v === 'object') return `<pre class="json">${escapeHtml(JSON.stringify(v, null, 2))}</pre>`;
+  return escapeHtml(String(v));
+}
+
+function escapeHtml(s){ return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+function renderKeyValueList(obj) {
+  // Render simple key/value pairs (for small objects)
+  let html = '<div class="table-responsive"><table class="table table-sm"><tbody>';
+  for (const k of Object.keys(obj)) {
+    if (k === 'topTerms' || k === 'lsiCandidates' || k === 'images' || k === 'crawlGraph' || k==='clusters' || k==='notes' || k==='problems') continue;
+    html += `<tr><td class="field-name">${escapeHtml(k)}</td><td>${prettyVal(obj[k])}</td></tr>`;
+  }
+  html += '</tbody></table></div>';
+  return html;
+}
+
+function renderList(label, arr, limit = 0) {
+  if (!Array.isArray(arr) || arr.length === 0) return `<p class="small-muted">No ${escapeHtml(label)} found</p>`;
+  const items = limit>0 ? arr.slice(0,limit) : arr;
+  return `<div><strong>${escapeHtml(label)} (${arr.length})</strong><ul>${items.map(x => `<li>${escapeHtml(typeof x==='object' ? JSON.stringify(x) : x)}</li>`).join('')}</ul></div>`;
+}
+
+function renderProblems(problems) {
+  if (!Array.isArray(problems) || problems.length===0) return '<p class="text-success">No problems detected 🎉</p>';
+  return problems.map(p => `
+    <div class="problem-item mb-2 p-3 rounded" style="background:#fff8f8;border-left:4px solid #c62828">
+      <div class="d-flex justify-content-between">
+        <div><strong>⚠️ ${escapeHtml(p.issue || 'Unknown issue')}</strong></div>
+        <div class="small-muted">${escapeHtml(p.severity||'')}</div>
+      </div>
+      <div class="mt-2"><em>Solution:</em> ${escapeHtml(p.solution || 'No solution provided')}</div>
+      ${p.extra ? `<pre class="json mt-2">${escapeHtml(JSON.stringify(p.extra,null,2))}</pre>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderFullResult(apiResp) {
+  if (!apiResp) { resultsArea.innerHTML = '<p>No data</p>'; return; }
+  const data = apiResp.results || {};
+
+  let html = '';
+  // Top header: basic info & score
+  html += `<div class="mb-3 d-flex justify-content-between align-items-center gap-3">
+    <div>
+      <h4 class="mb-1">${escapeHtml(data.title || data.url || apiResp.url || 'Audit Result')}</h4>
+      <div class="small-muted">URL: ${escapeHtml(data.url || '')} · Status: ${escapeHtml(data.status ?? 'N/A')} · Nav: ${escapeHtml(data.navTimeMs ?? 'N/A')}ms</div>
+    </div>
+    <div class="text-end">
+      <div class="h1 mb-0" style="color:#1b4b72">${escapeHtml(data.overallScore ?? apiResp.score ?? 'N/A')}<span class="small-muted"> /100</span></div>
+      <div class="small-muted">Overall Score</div>
+    </div>
+  </div>`;
+
+  // Problems + suggestions
+  html += `<div class="mb-3"><h5>Problems & Suggestions</h5>${renderProblems(apiResp.problems || [])}</div>`;
+
+  // Notes
+  if (Array.isArray(apiResp.notes) && apiResp.notes.length) {
+    html += `<div class="mb-3"><h6>Notes</h6><ul>${apiResp.notes.map(n=>`<li class="small-muted">${escapeHtml(n)}</li>`).join('')}</ul></div>`;
+  }
+
+  // Key/value table for most fields
+  html += `<div class="mb-3"><h5>All Key Values</h5>${renderKeyValueList(data)}</div>`;
+
+  // TopTerms
+  html += `<div class="mb-3"><h5>Top Terms / Keywords</h5>${renderList('Top Terms', data.topTerms || [], 50)}</div>`;
+
+  // LSI candidates
+  html += `<div class="mb-3"><h5>LSI Candidates (co-occurrence)</h5>${data.lsiCandidates ? `<pre class="json">${escapeHtml(JSON.stringify(data.lsiCandidates, null, 2))}</pre>` : '<p class="small-muted">N/A</p>'}</div>`;
+
+  // Images array
+  html += `<div class="mb-3"><h5>Images (first 50)</h5>`;
+  if (Array.isArray(data.images) && data.images.length) {
+    html += `<div class="row gx-2 gy-2">`;
+    data.images.slice(0,50).forEach(img => {
+      html += `<div class="col-6 col-md-3">
+        <div class="card">
+          <div style="height:120px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#f1f5f9">
+            <img src="${escapeHtml(img.src || '')}" alt="${escapeHtml(img.alt || '')}" style="max-width:100%;max-height:120px;">
+          </div>
+          <div class="card-body p-2">
+            <div class="small-muted">${escapeHtml(img.alt || 'No alt')}</div>
+            <div class="small text-truncate">${escapeHtml(img.src || '')}</div>
+          </div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  } else {
+    html += `<p class="small-muted">No images found</p>`;
+  }
+  html += `</div>`;
+
+  // Internal / External links
+  html += `<div class="mb-3"><h5>Links</h5>`;
+  html += renderList('Internal Links', data.internal || data.internalLinksList || [], 200);
+  html += renderList('External Links', data.external || data.externalLinksList || [], 200);
+  html += `</div>`;
+
+  // Schema types and raw JSON-LD if available
+  html += `<div class="mb-3"><h5>Schema / Structured Data</h5>`;
+  if (Array.isArray(data.schemaTypes) && data.schemaTypes.length) {
+    html += `<p>Detected types: ${escapeHtml(data.schemaTypes.join(', '))}</p>`;
+  } else {
+    html += `<p class="small-muted">No schema types detected</p>`;
+  }
+  if (data.rawLdJson) {
+    html += `<h6>Raw JSON-LD</h6><pre class="json">${escapeHtml(JSON.stringify(data.rawLdJson, null, 2))}</pre>`;
+  }
+  html += `</div>`;
+
+  // Crawl graph (big)
+  html += `<div class="mb-3"><h5>Internal Crawl Graph</h5>`;
+  if (data.crawlGraph) html += `<pre class="json">${escapeHtml(JSON.stringify(data.crawlGraph, null, 2))}</pre>`;
+  else html += `<p class="small-muted">No crawl graph</p>`;
+  html += `</div>`;
+
+  // Intent scores
+  html += `<div class="mb-3"><h5>Intent Scores</h5>${data.intentScore ? `<pre class="json">${escapeHtml(JSON.stringify(data.intentScore, null, 2))}</pre>` : '<p class="small-muted">N/A</p>'}</div>`;
+
+  // Raw full results JSON (download / copyable)
+  html += `<div class="mb-3"><h5>Raw Results JSON</h5><pre class="json">${escapeHtml(JSON.stringify(apiResp, null, 2))}</pre></div>`;
+
+  resultsArea.innerHTML = html;
+  // show helpful indicators (badges) by replacing text for some keys
+  badgeifyCommonBooleans();
+  // scroll to results
+  resultsArea.scrollIntoView({behavior:'smooth'});
+}
+
+function badgeifyCommonBooleans(){
+  // replace "true"/"false" in results area for common fields (visual only)
+  ['schemaDetected','faqSchema','howtoSchema','multilingual','hasHreflang','jsSeoRisk','thinContent','structuredContent'].forEach(k=>{
+    const re = new RegExp(`(${k}[^\\n]*?:\\s*)(true|false|\"true\"|\"false\")`, 'gi');
+    resultsArea.innerHTML = resultsArea.innerHTML.replace(re, (m, p1, p2)=>{
+      const val = /true/i.test(p2);
+      return `${p1}<span class="${val ? 'badge-yes' : 'badge-no'}">${val ? 'Yes' : 'No'}</span>`;
+    });
+  });
+}
+
+function copyJSON(){
+  if (!lastResponse) return alert('No data');
+  navigator.clipboard.writeText(JSON.stringify(lastResponse, null, 2)).then(()=> alert('Copied JSON to clipboard'));
+}
+
+function downloadJSON(){
+  if (!lastResponse) return alert('No data');
+  const blob = new Blob([JSON.stringify(lastResponse, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (lastResponse.results && lastResponse.results.url ? lastResponse.results.url.replace(/https?:\/\//,'').replace(/[^\w\-\.]/g,'_') : 'audit') + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function collapseAll(){
+  const els = resultsArea.querySelectorAll('.json');
+  els.forEach(e => {
+    // no-op for now; this is placeholder if you want collapse behavior
+  });
+}
+
+// small helper: allow pressing enter to run
+urlInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') runBtn.click(); });
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
